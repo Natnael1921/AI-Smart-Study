@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/auth.routes.js";
+import courseRoutes from "./routes/course.routes.js";
 
 dotenv.config();
 connectDB();
@@ -16,8 +17,7 @@ app.get("/", (req, res) => {
   res.send("Quiz AI Backend Running Successfully");
 });
 app.use("/api/auth", authRoutes);
+app.use("/api/courses", courseRoutes);
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () =>
-  console.log(`Server running on port ${PORT}`)
-);
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

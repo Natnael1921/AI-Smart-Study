@@ -1,12 +1,14 @@
-import express from "express";
 import dotenv from "dotenv";
+dotenv.config();
+import express from "express";
 import cors from "cors";
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/auth.routes.js";
 import courseRoutes from "./routes/course.routes.js";
 import uploadRoutes from "./routes/upload.routes.js";
+import aiRoutes from "./routes/ai.routes.js";
 
-dotenv.config();
+
 connectDB();
 
 const app = express();
@@ -20,6 +22,8 @@ app.get("/", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/courses", courseRoutes);
 app.use("/api/upload", uploadRoutes);
+app.use("/api/ai", aiRoutes);
+console.log("load groq api key:", process.env.GROQ_API_KEY);
 
 
 const PORT = process.env.PORT || 5000;

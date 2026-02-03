@@ -113,3 +113,38 @@ export const generateAIContent = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+//GET QUIZ BY COURSE
+
+export const getQuizByCourse = async (req, res) => {
+  try {
+    const { courseId } = req.params;
+
+    const quiz = await Quiz.findOne({ course: courseId });
+
+    if (!quiz) {
+      return res.status(404).json({ message: "Quiz not found" });
+    }
+
+    res.json(quiz);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+//GET FLASHCARDS BY COURSE
+
+export const getFlashCardsByCourse = async (req, res) => {
+  try {
+    const { courseId } = req.params;
+
+    const flashCards = await FlashCard.findOne({ course: courseId });
+
+    if (!flashCards) {
+      return res.status(404).json({ message: "Flashcards not found" });
+    }
+
+    res.json(flashCards);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};

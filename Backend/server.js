@@ -23,7 +23,6 @@ app.use("/api/auth", authRoutes);
 app.use("/api/courses", courseRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/ai", aiRoutes);
-console.log("load groq api key:", process.env.GROQ_API_KEY);
 
 
 const PORT = process.env.PORT || 5000;

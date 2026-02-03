@@ -1,75 +1,27 @@
-export const shortNotesPrompt = (text) => `
-You are an expert teacher.
+export const quizAndFlashPrompt = (text) => `
+Generate content strictly between markers.
+DO NOT add anything outside the markers.
 
-From the content below, generate chapter-wise short notes.
+===QUIZ===
+Generate EXACTLY 25 multiple choice questions.
 
-Rules:
-- Mention MAIN POINTS clearly
-- Use simple language
-- Explain concepts beautifully but concisely
-- Structure clearly with headings and bullet points
+Format strictly:
+Q: question
+A) option
+B) option
+C) option
+D) option
+ANSWER: full correct option text
+EXPLANATION: short explanation
+===END QUIZ===
 
-Output format (JSON):
-{
-  "chapters": [
-    {
-      "title": "Chapter title",
-      "content": "Well structured explanation"
-    }
-  ]
-}
+===FLASHCARDS===
+Generate flashcards.
 
-CONTENT:
-${text}
-`;
-
-export const quizPrompt = (text) => `
-You are an exam question creator.
-
-Generate EXACTLY 25 multiple-choice questions from the content.
-
-Rules:
-- Each question must have 4 options
-- One correct answer
-- Provide short explanation
-- Medium difficulty
-- Avoid repeating questions
-
-Output format (JSON):
-{
-  "questions": [
-    {
-      "question": "",
-      "options": ["A", "B", "C", "D"],
-      "correctAnswer": "",
-      "explanation": ""
-    }
-  ]
-}
-
-CONTENT:
-${text}
-`;
-
-export const flashCardPrompt = (text) => `
-You are creating study flashcards.
-
-Generate EXACTLY 15 flashcards.
-
-Rules:
-- Front: short question or term
-- Back: clear explanation
-- Focus on important concepts only
-
-Output format (JSON):
-{
-  "cards": [
-    {
-      "front": "",
-      "back": ""
-    }
-  ]
-}
+Format strictly:
+FRONT: text
+BACK: text
+===END FLASHCARDS===
 
 CONTENT:
 ${text}

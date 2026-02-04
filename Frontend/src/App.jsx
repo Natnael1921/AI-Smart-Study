@@ -1,9 +1,18 @@
+import { Routes, Route } from "react-router-dom";
+
+import Navbar from "../components/Navbar";
+import Landing from "../pages/Landing";
+import Auth from "../pages/Auth";
+
 function App() {
   return (
-    <div style={{ padding: "2rem" }}>
-      <h1>AI Quiz App</h1>
-      <p>Frontend setup complete.</p>
-    </div>
+    <>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route path="/auth" element={<Auth />} />
+      </Routes>
+    </>
   );
 }
 

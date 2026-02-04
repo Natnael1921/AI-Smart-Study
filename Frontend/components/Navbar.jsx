@@ -21,7 +21,6 @@ const Navbar = () => {
         >
           Login
         </button>
-
         <button
           className="btn-primary"
           onClick={() => navigate("/auth?mode=register")}

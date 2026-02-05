@@ -6,6 +6,7 @@ import Landing from "../pages/Landing";
 import Auth from "../pages/Auth";
 import Home from "../pages/Home";
 import ProtectedRoute from "../components/ProtectedRoute";
+import Courses from "../pages/Courses";
 
 function App() {
   const navigate = useNavigate();
@@ -38,6 +39,14 @@ function App() {
           element={
             <ProtectedRoute user={user}>
               <Home user={user} onLogout={handleLogout} />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/courses"
+          element={
+            <ProtectedRoute user={user}>
+              <Courses />
             </ProtectedRoute>
           }
         />

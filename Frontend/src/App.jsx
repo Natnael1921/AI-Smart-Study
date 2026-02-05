@@ -7,6 +7,8 @@ import Auth from "../pages/Auth";
 import Home from "../pages/Home";
 import ProtectedRoute from "../components/ProtectedRoute";
 import Courses from "../pages/Courses";
+import Notes from "../pages/Notes";
+import Quizzes from "../pages/Quizzes";
 
 function App() {
   const navigate = useNavigate();
@@ -47,6 +49,22 @@ function App() {
           element={
             <ProtectedRoute user={user}>
               <Courses />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/notes"
+          element={
+            <ProtectedRoute user={user}>
+              <Notes />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/quizzes"
+          element={
+            <ProtectedRoute user={user}>
+              <Quizzes />
             </ProtectedRoute>
           }
         />

@@ -2,7 +2,7 @@ import { useState } from "react";
 import Sidebar from "../components/sidebar";
 import UploadCard from "../components/UploadCard";
 import API from "../api";
-import "../styles/home.css";
+import "../styles/Home.css";
 
 const Home = ({ user, onLogout }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);

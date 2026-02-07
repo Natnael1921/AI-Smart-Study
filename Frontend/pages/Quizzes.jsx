@@ -25,31 +25,39 @@ const Quizzes = () => {
     setCourses(res.data);
   };
 
-  const openQuiz = async (course) => {
-    const token = localStorage.getItem("token");
+const openQuiz = async (course) => {
+  const token = localStorage.getItem("token");
 
-    const res = await API.get(`/api/ai/quiz/${course._id}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+  const res = await API.get(`/api/ai/quiz/${course._id}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
 
-    const normalized = res.data.questions.map((q) => {
-      const correctIndex = q.options.findIndex(
-        (o) =>
-          o.replace(/\s+/g, " ").trim().toLowerCase() ===
-          q.correctAnswer.replace(/\s+/g, " ").trim().toLowerCase(),
+  const normalized = res.data.questions.map((q) => {
+    let correctIndex = q.options.findIndex((o) =>
+      o.toLowerCase().includes(q.correctAnswer.toLowerCase())
+    );
+
+
+    if (correctIndex === -1 && q.correctAnswer.length === 1) {
+      correctIndex = ["A", "B", "C", "D"].indexOf(
+        q.correctAnswer.toUpperCase()
       );
+    }
 
-      return {
-        ...q,
-        correctIndex,
-      };
-    });
+    if (correctIndex === -1) correctIndex = 0;
 
-    setQuestions(normalized);
-    setSelectedQuiz(course);
-    setAnswers({});
-    setFinished(false);
-  };
+    return {
+      ...q,
+      correctIndex,
+    };
+  });
+
+  setQuestions(normalized);
+  setSelectedQuiz(course);
+  setAnswers({});
+  setFinished(false);
+};
+
 
   const choose = (qIndex, optIndex) => {
     if (finished) return;

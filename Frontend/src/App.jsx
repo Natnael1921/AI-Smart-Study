@@ -9,6 +9,7 @@ import ProtectedRoute from "../components/ProtectedRoute";
 import Courses from "../pages/Courses";
 import Notes from "../pages/Notes";
 import Quizzes from "../pages/Quizzes";
+import Flashcards from "../pages/Flashcards";
 
 function App() {
   const navigate = useNavigate();
@@ -65,6 +66,14 @@ function App() {
           element={
             <ProtectedRoute user={user}>
               <Quizzes />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/flashcards"
+          element={
+            <ProtectedRoute user={user}>
+              <Flashcards />
             </ProtectedRoute>
           }
         />

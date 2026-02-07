@@ -3,6 +3,7 @@ import Sidebar from "../components/sidebar";
 import API from "../api";
 import "../styles/courses.css";
 import { useNavigate } from "react-router-dom";
+import Spinner from "../components/Spinner";
 
 const Courses = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -45,7 +46,7 @@ const Courses = () => {
         <h1 className="courses-title">Your Courses</h1>
 
         {loading ? (
-          <p className="loading">Loading...</p>
+          <Spinner />
         ) : courses.length === 0 ? (
           <p className="loading">No courses yet</p>
         ) : (

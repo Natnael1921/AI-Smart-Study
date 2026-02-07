@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Sidebar from "../components/sidebar";
 import API from "../api";
 import "../styles/quizzes.css";
+import Spinner from "../components/Spinner";
 
 const Quizzes = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -10,12 +11,14 @@ const Quizzes = () => {
   const [selectedQuiz, setSelectedQuiz] = useState(null);
   const [answers, setAnswers] = useState({});
   const [finished, setFinished] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchCourses();
   }, []);
 
   const fetchCourses = async () => {
+    setLoading(true);
     const token = localStorage.getItem("token");
 
     const res = await API.get("/api/courses", {
@@ -23,41 +26,40 @@ const Quizzes = () => {
     });
 
     setCourses(res.data);
+    setLoading(false);
   };
 
-const openQuiz = async (course) => {
-  const token = localStorage.getItem("token");
+  const openQuiz = async (course) => {
+    const token = localStorage.getItem("token");
 
-  const res = await API.get(`/api/ai/quiz/${course._id}`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
+    const res = await API.get(`/api/ai/quiz/${course._id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
 
-  const normalized = res.data.questions.map((q) => {
-    let correctIndex = q.options.findIndex((o) =>
-      o.toLowerCase().includes(q.correctAnswer.toLowerCase())
-    );
-
-
-    if (correctIndex === -1 && q.correctAnswer.length === 1) {
-      correctIndex = ["A", "B", "C", "D"].indexOf(
-        q.correctAnswer.toUpperCase()
+    const normalized = res.data.questions.map((q) => {
+      let correctIndex = q.options.findIndex((o) =>
+        o.toLowerCase().includes(q.correctAnswer.toLowerCase()),
       );
-    }
 
-    if (correctIndex === -1) correctIndex = 0;
+      if (correctIndex === -1 && q.correctAnswer.length === 1) {
+        correctIndex = ["A", "B", "C", "D"].indexOf(
+          q.correctAnswer.toUpperCase(),
+        );
+      }
 
-    return {
-      ...q,
-      correctIndex,
-    };
-  });
+      if (correctIndex === -1) correctIndex = 0;
 
-  setQuestions(normalized);
-  setSelectedQuiz(course);
-  setAnswers({});
-  setFinished(false);
-};
+      return {
+        ...q,
+        correctIndex,
+      };
+    });
 
+    setQuestions(normalized);
+    setSelectedQuiz(course);
+    setAnswers({});
+    setFinished(false);
+  };
 
   const choose = (qIndex, optIndex) => {
     if (finished) return;
@@ -82,6 +84,7 @@ const openQuiz = async (course) => {
         {!selectedQuiz && (
           <>
             <h1 className="quiz-title">Your Recent Quizzes</h1>
+            {loading && <Spinner />}
 
             <div className="quiz-list">
               {courses.map((c) => (

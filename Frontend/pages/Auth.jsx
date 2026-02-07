@@ -2,8 +2,10 @@ import { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import API from "../api";
 import "../styles/auth.css";
-
+import Spinner from "../components/Spinner";
 const Auth = ({ setUser }) => {
+  const [loading, setLoading] = useState(false);
+
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const modeFromUrl = searchParams.get("mode");
@@ -20,6 +22,7 @@ const Auth = ({ setUser }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       if (mode === "login") {
         const res = await API.post("/api/auth/login", {
@@ -37,6 +40,8 @@ const Auth = ({ setUser }) => {
       }
     } catch (err) {
       alert(err.response?.data?.message || "Something went wrong");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -73,7 +78,13 @@ const Auth = ({ setUser }) => {
           required
         />
 
-        <button type="submit">{mode === "login" ? "Login" : "Register"}</button>
+        {loading ? (
+          <Spinner />
+        ) : (
+          <button type="submit">
+            {mode === "login" ? "Login" : "Register"}
+          </button>
+        )}
       </form>
     </div>
   );

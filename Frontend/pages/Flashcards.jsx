@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Sidebar from "../components/sidebar";
 import API from "../api";
 import "../styles/flashcards.css";
+import Spinner from "../components/Spinner";
 
 const Flashcards = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -9,12 +10,14 @@ const Flashcards = () => {
   const [cards, setCards] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [flipped, setFlipped] = useState({});
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchCourses();
   }, []);
 
   const fetchCourses = async () => {
+    setLoading(true);
     const token = localStorage.getItem("token");
 
     const res = await API.get("/api/courses", {
@@ -22,6 +25,7 @@ const Flashcards = () => {
     });
 
     setCourses(res.data);
+    setLoading(false);
   };
 
   const openFlashcards = async (course) => {
@@ -52,6 +56,7 @@ const Flashcards = () => {
         {!selectedCourse && (
           <>
             <h1 className="flash-title">Your recent Flashcards</h1>
+            {loading && <Spinner />}
 
             <div className="flash-list">
               {courses.map((c) => (
@@ -69,7 +74,10 @@ const Flashcards = () => {
 
         {selectedCourse && (
           <>
-            <button className="back-btn" onClick={() => setSelectedCourse(null)}>
+            <button
+              className="back-btn"
+              onClick={() => setSelectedCourse(null)}
+            >
               ← Back
             </button>
 

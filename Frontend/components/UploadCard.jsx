@@ -1,4 +1,4 @@
-import "../styles/uploadCard.css";
+import "../styles/uploadcard.css";
 
 const UploadCard = ({ onUpload }) => {
   return (

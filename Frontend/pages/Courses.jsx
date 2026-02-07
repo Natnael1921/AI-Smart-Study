@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import Sidebar from "../components/sidebar";
 import API from "../api";
 import "../styles/courses.css";
+import { useNavigate } from "react-router-dom";
 
 const Courses = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -62,18 +64,14 @@ const Courses = () => {
 
                   <button
                     className="primary-btn"
-                    onClick={() =>
-                      (window.location.href = `/quiz/${course._id}`)
-                    }
+                    onClick={() => navigate(`/quizzes/`)}
                   >
                     Quiz
                   </button>
 
                   <button
                     className="secondary-btn"
-                    onClick={() =>
-                      (window.location.href = `/flashcards/${course._id}`)
-                    }
+                    onClick={() => navigate(`/flashcards`)}
                   >
                     Flashcards
                   </button>

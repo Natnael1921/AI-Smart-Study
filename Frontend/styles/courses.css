@@ -35,13 +35,13 @@
 /* CARD */
 
 .course-card {
-   background: linear-gradient(#ffffff 0%, #cdecc1 100%);
+  background: linear-gradient(#ffffff 0%, #cdecc1 100%);
   border-radius: 18px;
-  padding:15px ;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-  width: 700px;
+  padding: 15px;
+  box-shadow: 0 10px 30px rgba(4, 85, 23, 0.25);
+  width: 900px;
   transition: 0.3s ease;
-  border: 2px solid #7cff9a;
+  border: 1.5px solid #7cff9a;
 }
 
 .course-card:hover {
@@ -81,13 +81,12 @@
 .primary-btn {
   background: #00c853;
   color: white;
-   box-shadow: rgba(7, 65, 5, 0.2) 0px 1px 24px;
+  box-shadow: rgba(7, 65, 5, 0.2) 0px 1px 24px;
 }
 
 .secondary-btn {
   background: #111;
   color: white;
-  
 }
 
 /* HAMBURGER */
@@ -104,13 +103,10 @@
 
 /* MOBILE */
 @media (max-width: 768px) {
-
-
   .courses-layout {
     margin-left: 0;
     flex-direction: column;
   }
-
 
   .courses-content {
     margin: 0;
@@ -175,35 +171,30 @@
   }
 }
 
+.courses-grid {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
 
-  .courses-grid {
-    width: 100%;
-    max-width: 400px;
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
-  }
+.course-card h3 {
+  font-size: 20px;
+  text-align: center;
+  margin-bottom: 15px;
+}
 
-  
+.course-actions {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  width: 100%;
+}
 
-  .course-card h3 {
-    font-size: 20px;
-    text-align: center;
-    margin-bottom: 15px;
-  }
-
-  .course-actions {
-    display: flex;
-    flex-direction: row;
-    gap: 12px;
-    width: 100%;
-  }
-
-  .course-actions button {
-    width: 100%;
-    padding: 14px;
-    font-size: 16px;
-    border-radius: 12px;
-  }
-
-
+.course-actions button {
+  width: 100%;
+  padding: 14px;
+  font-size: 16px;
+  border-radius: 12px;
+}

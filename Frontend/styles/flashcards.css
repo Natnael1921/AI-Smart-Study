@@ -25,6 +25,7 @@
   cursor: pointer;
   font-weight: 500;
   transition: 0.3s;
+  box-shadow: 0 10px 30px rgba(4, 85, 23, 0.25);
 }
 
 .flash-course:hover {

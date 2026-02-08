@@ -17,13 +17,19 @@ const Home = ({ user, onLogout }) => {
 
     try {
       const token = localStorage.getItem("token");
+
+      // 1 Upload PDF
       const res = await API.post("/api/upload", formData, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      alert("File uploaded successfully!");
-      console.log(res.data);
     } catch (err) {
-      alert("Upload failed");
+      if (err.response) {
+        console.error("Backend error:", err.response.data);
+        alert("Upload failed: " + err.response.data.message);
+      } else {
+        console.error("Unknown error:", err);
+        alert("Upload failed: " + err.message);
+      }
     }
   };
 

@@ -5,10 +5,10 @@ import User from "../models/user.model.js";
 export const uploadFile = async (req, res) => {
   try {
     const { title } = req.body;
-    const userId = req.user.id;
+    const userId = req.user?.id;
 
-    if (!req.file || !title) {
-      return res.status(400).json({ message: "File and title are required" });
+    if (!req.file || !title || !userId) {
+      return res.status(400).json({ message: "File, title or user ID missing" });
     }
 
     // 1. Create course
@@ -22,15 +22,22 @@ export const uploadFile = async (req, res) => {
       $push: { courses: course._id },
     });
 
-    // 2. Extract text
     const extractedText = await parsePDF(req.file.path);
 
-    res.status(201).json({
+    if (extractedText) {
+      console.log("Extracted Text (first 500 chars):", extractedText.slice(0, 500));
+    } else {
+      console.log("Extracted text is empty or undefined");
+    }
+    return res.status(201).json({
       courseId: course._id,
       extractedText,
     });
+
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: error.message } );
+    console.error("UPLOAD ERROR:", error);
+    if (!res.headersSent) {
+      return res.status(500).json({ message: error.message });
+    }
   }
 };

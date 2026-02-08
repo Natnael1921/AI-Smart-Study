@@ -29,7 +29,6 @@ function App() {
     navigate("/");
   };
 
-  // ✅ show navbar ONLY on landing page
   const showNavbar = location.pathname === "/";
 
   return (

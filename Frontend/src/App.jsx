@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 
 import Navbar from "../components/Navbar";
 import Landing from "../pages/Landing";
@@ -13,6 +13,7 @@ import Flashcards from "../pages/Flashcards";
 
 function App() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [user, setUser] = useState(() => {
     const storedUser = localStorage.getItem("user");
@@ -28,15 +29,17 @@ function App() {
     navigate("/");
   };
 
+  // ✅ show navbar ONLY on landing page
+  const showNavbar = location.pathname === "/";
+
   return (
     <>
-      {!user && <Navbar />}
+      {showNavbar && <Navbar />}
 
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/auth" element={<Auth setUser={setUser} />} />
 
-        {/* Protected route */}
         <Route
           path="/home"
           element={
@@ -45,6 +48,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/courses"
           element={
@@ -53,6 +57,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/notes"
           element={
@@ -61,6 +66,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/quizzes"
           element={
@@ -69,6 +75,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/flashcards"
           element={

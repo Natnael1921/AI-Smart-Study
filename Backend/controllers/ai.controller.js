@@ -24,9 +24,8 @@ export const generateAIContent = async (req, res) => {
       return res.status(404).json({ message: "Course not found" });
     }
 
-
     const completion = await groq.chat.completions.create({
-      model: "llama-3.1-8b-instant", 
+      model: "llama-3.1-8b-instant",
       temperature: 0,
       messages: [
         {
@@ -37,12 +36,32 @@ export const generateAIContent = async (req, res) => {
     });
 
     const raw = completion.choices[0].message.content;
+    console.log("AI RAW RESPONSE:\n", raw);
 
+    //  QUIZ BLOCK
     const quizBlock = extractBlock(raw, "===QUIZ===", "===END QUIZ===");
-    const flashBlock = extractBlock(raw, "===FLASHCARDS===", "===END FLASHCARDS===");
 
-    if (!quizBlock || !flashBlock) {
-      throw new Error("AI response missing required blocks");
+    //  FLASHCARDS (ROBUST)
+    const flashSection =
+      raw.split("===FLASHCARDS===")[1]?.split("===END FLASHCARDS===")[0] || "";
+
+    const cards = flashSection
+      .split("FRONT:")
+      .slice(1)
+      .map((block) => {
+        const [front, back] = block.split("BACK:");
+        return {
+          front: front?.trim(),
+          back: back?.trim(),
+        };
+      })
+      .filter((c) => c.front && c.back);
+
+
+    if (!quizBlock && cards.length === 0) {
+      return res.status(422).json({
+        message: "AI failed to generate content",
+      });
     }
     //  PARSE QUIZ QUESTIONS
     const questions = quizBlock
@@ -72,19 +91,6 @@ export const generateAIContent = async (req, res) => {
       })
       .filter(Boolean);
 
-    //  PARSE FLASHCARDS
-    const cards = flashBlock
-      .split("FRONT:")
-      .slice(1)
-      .map((c) => {
-        const [front, back] = c.split("BACK:");
-        return {
-          front: front?.trim(),
-          back: back?.trim() || "",
-        };
-      })
-      .filter((c) => c.front);
-
     if (questions.length === 0) {
       return res.status(422).json({
         message: "AI could not generate quiz questions",
@@ -107,12 +113,12 @@ export const generateAIContent = async (req, res) => {
       quizCount: questions.length,
       flashCardCount: cards.length,
     });
-
   } catch (err) {
-    console.error("❌ AI ERROR:", err);
+    console.error(" AI ERROR:", err);
     res.status(500).json({ message: err.message });
   }
 };
+
 //GET QUIZ BY COURSE
 
 export const getQuizByCourse = async (req, res) => {

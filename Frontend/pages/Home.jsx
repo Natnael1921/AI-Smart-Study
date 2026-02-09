@@ -22,6 +22,25 @@ const Home = ({ user, onLogout }) => {
       const res = await API.post("/api/upload", formData, {
         headers: { Authorization: `Bearer ${token}` },
       });
+      const { courseId, extractedText } = res.data;
+      console.log("Upload Response:", res.data);
+
+      // 2 Call AI endpoint
+      const cleanText = extractedText.replace(/\u0000/g, ""); // remove null chars
+      const aiRes = await API.post(
+        "/api/ai/generate",
+        { courseId, extractedText: cleanText },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        },
+      );
+      
+      alert(
+        `AI generated ${aiRes.data.quizCount} questions & ${aiRes.data.flashCardCount} flashcards`,
+      );
     } catch (err) {
       if (err.response) {
         console.error("Backend error:", err.response.data);

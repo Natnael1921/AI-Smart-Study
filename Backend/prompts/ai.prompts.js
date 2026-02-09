@@ -16,13 +16,23 @@ EXPLANATION: short explanation
 ===END QUIZ===
 
 ===FLASHCARDS===
-Generate flashcards.
+Generate EXACTLY 15 flashcards.
 
-Format strictly:
+Repeat this format INSIDE this block ONLY:
+
 FRONT: text
 BACK: text
+
+Do NOT repeat ===FLASHCARDS=== or ===END FLASHCARDS===
+
 ===END FLASHCARDS===
 
+IMPORTANT RULES:
+- ALWAYS include ALL markers
+- NEVER skip flashcards
+- NEVER rename markers
+- NEVER add explanations outside blocks
+
 CONTENT:
-${text}
+${text.slice(0, 6000)}
 `;

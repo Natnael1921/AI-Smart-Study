@@ -10,6 +10,8 @@ import Courses from "../pages/Courses";
 import Notes from "../pages/Notes";
 import Quizzes from "../pages/Quizzes";
 import Flashcards from "../pages/Flashcards";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const navigate = useNavigate();
@@ -84,6 +86,13 @@ function App() {
           }
         />
       </Routes>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        pauseOnHover
+        theme="dark"
+      />
     </>
   );
 }

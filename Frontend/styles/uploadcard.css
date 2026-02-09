@@ -7,7 +7,10 @@
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
   margin-left: 20%;
 }
-
+.upload-card h2 {
+  font-size: 22px;
+  color: #5af721;
+}
 .upload-icon {
   width: 100px;
   height: 60px;

@@ -3,6 +3,8 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import API from "../api";
 import "../styles/auth.css";
 import Spinner from "../components/Spinner";
+import { toast } from "react-toastify";
+
 const Auth = ({ setUser }) => {
   const [loading, setLoading] = useState(false);
 
@@ -32,11 +34,11 @@ const Auth = ({ setUser }) => {
         localStorage.setItem("token", res.data.token);
         localStorage.setItem("user", JSON.stringify(res.data.user));
         setUser(res.data.user);
-
+ toast.success("Login successful !");
         navigate("/home");
       } else {
         await API.post("/api/auth/register", form);
-        alert("Registration successful. Please login.");
+        toast.success("Registration successful! Please login now.");
       }
     } catch (err) {
       alert(err.response?.data?.message || "Something went wrong");

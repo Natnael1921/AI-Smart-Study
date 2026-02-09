@@ -3,54 +3,64 @@ import Sidebar from "../components/sidebar";
 import UploadCard from "../components/UploadCard";
 import API from "../api";
 import "../styles/Home.css";
+import { toast } from "react-toastify";
 
-const Home = ({ user, onLogout }) => {
+const Home = ({ user }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); 
 
-  const handleUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+const handleUpload = async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
 
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("title", file.name);
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("title", file.name);
 
-    try {
-      const token = localStorage.getItem("token");
+  const toastId = toast.loading("Uploading & generating content... ");
 
-      // 1 Upload PDF
-      const res = await API.post("/api/upload", formData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const { courseId, extractedText } = res.data;
-      console.log("Upload Response:", res.data);
+  try {
+    setIsLoading(true);
 
-      // 2 Call AI endpoint
-      const cleanText = extractedText.replace(/\u0000/g, ""); // remove null chars
-      const aiRes = await API.post(
-        "/api/ai/generate",
-        { courseId, extractedText: cleanText },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
+    const token = localStorage.getItem("token");
+
+    const res = await API.post("/api/upload", formData, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    const { courseId, extractedText } = res.data;
+
+    const cleanText = extractedText.replace(/\u0000/g, "");
+    const aiRes = await API.post(
+      "/api/ai/generate",
+      { courseId, extractedText: cleanText },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
-      );
-      
-      alert(
-        `AI generated ${aiRes.data.quizCount} questions & ${aiRes.data.flashCardCount} flashcards`,
-      );
-    } catch (err) {
-      if (err.response) {
-        console.error("Backend error:", err.response.data);
-        alert("Upload failed: " + err.response.data.message);
-      } else {
-        console.error("Unknown error:", err);
-        alert("Upload failed: " + err.message);
       }
-    }
-  };
+    );
+
+    toast.update(toastId, {
+      render: `Generated ${aiRes.data.quizCount} quizzes & ${aiRes.data.flashCardCount} flashcards `,
+      type: "success",
+      isLoading: false,
+      autoClose: 4000,
+    });
+  } catch (err) {
+    toast.update(toastId, {
+      render:
+        err.response?.data?.message || "Upload failed !",
+      type: "error",
+      isLoading: false,
+      autoClose: 4000,
+    });
+  } finally {
+    setIsLoading(false);
+  }
+};
+
 
   return (
     <div className="home-layout">
@@ -62,15 +72,16 @@ const Home = ({ user, onLogout }) => {
         </button>
 
         <div className="home-header">
-          <h2>Hi, {user?.name || "User"} </h2>
+          <h2>Hi, {user?.name || "User"}</h2>
         </div>
 
         <h1 className="home-text">
           <span>Welcome Back</span>, Time to grind
         </h1>
+
         <p className="subtitle">Upload your files to get your helpers</p>
 
-        <UploadCard onUpload={handleUpload} />
+        <UploadCard onUpload={handleUpload} isLoading={isLoading} />
       </main>
     </div>
   );

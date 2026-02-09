@@ -3,7 +3,7 @@ import Sidebar from "../components/sidebar";
 import API from "../api";
 import "../styles/flashcards.css";
 import Spinner from "../components/Spinner";
-
+import { toast } from "react-toastify";
 const Flashcards = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [courses, setCourses] = useState([]);
@@ -16,7 +16,8 @@ const Flashcards = () => {
     fetchCourses();
   }, []);
 
-  const fetchCourses = async () => {
+const fetchCourses = async () => {
+  try {
     setLoading(true);
     const token = localStorage.getItem("token");
 
@@ -25,8 +26,13 @@ const Flashcards = () => {
     });
 
     setCourses(res.data);
+  } catch (err) {
+    toast.error("Failed to load flashcard courses");
+  } finally {
     setLoading(false);
-  };
+  }
+};
+
 
   const openFlashcards = async (course) => {
     const token = localStorage.getItem("token");

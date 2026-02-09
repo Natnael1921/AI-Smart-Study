@@ -4,6 +4,7 @@ import API from "../api";
 import "../styles/courses.css";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../components/Spinner";
+import { toast } from "react-toastify";
 
 const Courses = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -25,7 +26,7 @@ const Courses = () => {
         setCourses(res.data);
       } catch (err) {
         console.log(err);
-        alert("Failed to load courses");
+        toast.error("Failed to load courses");
       } finally {
         setLoading(false);
       }
@@ -58,7 +59,7 @@ const Courses = () => {
                 <div className="course-actions">
                   <button
                     className="ghost-btn"
-                    onClick={() => alert("Notes coming soon ")}
+                    onClick={() => toast.info("Notes coming soon !")}
                   >
                     Notes
                   </button>

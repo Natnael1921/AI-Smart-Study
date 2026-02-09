@@ -35,23 +35,34 @@ const Quizzes = () => {
     const res = await API.get(`/api/ai/quiz/${course._id}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
+    const shuffleArray = (array) => {
+      const arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    };
 
     const normalized = res.data.questions.map((q) => {
-      let correctIndex = q.options.findIndex((o) =>
-        o.toLowerCase().includes(q.correctAnswer.toLowerCase()),
+      const cleanAnswer = q.correctAnswer.replace(/^[A-D]\)\s*/i, "").trim();
+
+      // shuffle options
+      const shuffledOptions = shuffleArray(q.options);
+
+      // find new correct index after shuffle
+      const correctIndex = shuffledOptions.findIndex(
+        (o) => o.trim().toLowerCase() === cleanAnswer.toLowerCase(),
       );
 
-      if (correctIndex === -1 && q.correctAnswer.length === 1) {
-        correctIndex = ["A", "B", "C", "D"].indexOf(
-          q.correctAnswer.toUpperCase(),
-        );
+      if (correctIndex === -1) {
+        console.warn("Answer mismatch after shuffle:", q);
       }
-
-      if (correctIndex === -1) correctIndex = 0;
 
       return {
         ...q,
-        correctIndex,
+        options: shuffledOptions,
+        correctIndex: correctIndex === -1 ? 0 : correctIndex,
       };
     });
 

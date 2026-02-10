@@ -19,11 +19,11 @@ const Home = ({ user }) => {
     if (!file) return;
 
     setSelectedFile(file);
-    setTitle(file.name.replace(".pdf", "")); // default nice title
+    setTitle(file.name.replace(".pdf", "")); // default title
     setShowTitleBox(true);
   };
 
-  //  STEP 2: real upload after title confirm
+  //  STEP 2: upload after title confirm
   const handleConfirmUpload = async () => {
     if (!title.trim() || !selectedFile) return;
 
@@ -54,7 +54,7 @@ const Home = ({ user }) => {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
-        }
+        },
       );
 
       toast.update(toastId, {
@@ -118,10 +118,7 @@ const Home = ({ user }) => {
                 >
                   Cancel
                 </button>
-                <button
-                  className="primary-btn"
-                  onClick={handleConfirmUpload}
-                >
+                <button className="primary-btn" onClick={handleConfirmUpload}>
                   Generate
                 </button>
               </div>

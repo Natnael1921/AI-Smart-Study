@@ -16,23 +16,22 @@ const Flashcards = () => {
     fetchCourses();
   }, []);
 
-const fetchCourses = async () => {
-  try {
-    setLoading(true);
-    const token = localStorage.getItem("token");
+  const fetchCourses = async () => {
+    try {
+      setLoading(true);
+      const token = localStorage.getItem("token");
 
-    const res = await API.get("/api/courses", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+      const res = await API.get("/api/courses", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
-    setCourses(res.data);
-  } catch (err) {
-    toast.error("Failed to load flashcard courses");
-  } finally {
-    setLoading(false);
-  }
-};
-
+      setCourses(res.data);
+    } catch (err) {
+      toast.error("Failed to load flashcard courses");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const openFlashcards = async (course) => {
     const token = localStorage.getItem("token");

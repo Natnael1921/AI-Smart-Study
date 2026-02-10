@@ -7,20 +7,25 @@
 
 .courses-content {
   flex: 1;
-  padding: 40px;
+  padding: 32px 40px;
   position: relative;
 }
 
+/* TITLE */
+
 .courses-title {
-  font-size: 32px;
-  font-weight: 700;
-  margin-bottom: 30px;
+  font-size: 26px;
+  font-weight: 600;
+  margin-bottom: 25px;
+  color: #1f2937;
 }
+
+/* EMPTY / LOADING */
 
 .loading {
   text-align: center;
   margin-top: 60px;
-  font-size: 18px;
+  font-size: 16px;
   opacity: 0.6;
 }
 
@@ -28,67 +33,79 @@
 
 .courses-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 25px;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+  width: 100%;
 }
 
 /* CARD */
 
 .course-card {
-  background: linear-gradient(#ffffff 0%, #cdecc1 100%);
-  border-radius: 18px;
-  padding: 15px;
-  box-shadow: 0 10px 30px rgba(4, 85, 23, 0.25);
-  width: 900px;
-  transition: 0.3s ease;
-  border: 1.5px solid #7cff9a;
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid #e5e7eb;
 }
 
 .course-card:hover {
-  transform: translateY(-6px);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
 }
 
 .course-card h3 {
-  font-size: 20px;
-  margin-bottom: 20px;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: #111827;
+  text-align: center;
 }
 
-/* BUTTONS */
+/* ACTIONS */
 
 .course-actions {
   display: flex;
   gap: 10px;
-  flex-wrap: wrap;
 }
 
 .course-actions button {
   flex: 1;
-  padding: 10px 14px;
-  border-radius: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
   border: none;
   cursor: pointer;
   font-weight: 500;
+  font-size: 14px;
 }
 
 /* BUTTON STYLES */
 
 .ghost-btn {
-  background: #fff;
-  border: 1px solid #ccc;
-  box-shadow: rgba(7, 65, 5, 0.2) 0px 1px 24px;
+  background: #f9fafb;
+  border: 1px solid #d1d5db;
+  color: #374151;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 
 .primary-btn {
-  background: #00c853;
+  background: #22c55e;
   color: white;
-  box-shadow: rgba(7, 65, 5, 0.2) 0px 1px 24px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 
 .secondary-btn {
-  background: #111;
+  background: #111827;
   color: white;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 
+.primary-btn:hover,
+.secondary-btn:hover,
+.ghost-btn:hover {
+  transform: scale(1.09);
+  opacity: 0.8;
+}
 /* HAMBURGER */
 
 .hamburger {
@@ -99,9 +116,11 @@
   font-size: 24px;
   background: none;
   border: none;
+  cursor: pointer;
 }
 
 /* MOBILE */
+
 @media (max-width: 768px) {
   .courses-layout {
     margin-left: 0;
@@ -109,92 +128,35 @@
   }
 
   .courses-content {
-    margin: 0;
-    width: 100%;
-    padding: 30px;
-    box-sizing: border-box;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+    padding: 28px 22px;
     align-items: center;
   }
 
   .hamburger {
     display: block;
-    align-self: flex-start;
-    font-size: 24px;
-    background: none;
-    border: none;
     margin-bottom: 20px;
-    cursor: pointer;
   }
 
   .courses-title {
-    font-size: 32px;
-    font-weight: 600;
+    font-size: 24px;
     text-align: center;
-    margin-bottom: 25px;
   }
 
   .courses-grid {
-    width: 100%;
+    grid-template-columns: 1fr;
     max-width: 420px;
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
   }
 
   .course-card {
-    width: 100%;
-    padding: 25px;
-    box-sizing: border-box;
-  }
-
-  .course-card h3 {
-    font-size: 22px;
-    text-align: center;
-    margin-bottom: 15px;
+    padding: 20px;
   }
 
   .course-actions {
-    display: flex;
     flex-direction: column;
-    gap: 12px;
-    width: 100%;
   }
 
   .course-actions button {
-    width: 100%;
-    padding: 14px;
-    font-size: 16px;
-    border-radius: 12px;
+    padding: 12px;
+    font-size: 15px;
   }
-}
-
-.courses-grid {
-  width: 100%;
-  max-width: 400px;
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
-}
-
-.course-card h3 {
-  font-size: 20px;
-  text-align: center;
-  margin-bottom: 15px;
-}
-
-.course-actions {
-  display: flex;
-  flex-direction: row;
-  gap: 12px;
-  width: 100%;
-}
-
-.course-actions button {
-  width: 100%;
-  padding: 14px;
-  font-size: 16px;
-  border-radius: 12px;
 }

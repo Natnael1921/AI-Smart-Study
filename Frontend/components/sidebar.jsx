@@ -13,7 +13,14 @@ const Sidebar = ({ isOpen, onClose }) => {
   return (
     <aside className={`sidebar ${isOpen ? "open" : ""}`}>
       <div className="sidebar-header">
-        <h2 className="sidebar-logo">AI Quiz</h2>
+        <div className="logo-group">
+          <img
+            src="/appLogo.png"
+            alt="Smart Study Logo"
+            className="sidebar-logo-img"
+          />
+          <h2 className="sidebar-logo">Smart-Study</h2>
+        </div>
 
         <button className="sidebar-close" onClick={onClose}>
           ✕

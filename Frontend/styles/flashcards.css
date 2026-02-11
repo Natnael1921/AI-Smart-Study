@@ -154,7 +154,7 @@
 @media (max-width: 768px) {
   .flash-title {
     text-align: center;
-    font-size: 26px;
+    font-size: 24px;
   }
 
   .flash-list {
@@ -163,20 +163,34 @@
   }
 
   .flash-course {
-    padding: 18px;
+    padding: 16px;
+    flex-wrap: wrap;
+    gap: 8px;
   }
 
   .flash-name {
-    font-size: 16px;
+    font-size: 15px;
+    word-break: break-word;
+  }
+
+  .flash-date {
+    font-size: 11px;
+    padding: 4px 8px;
+  }
+
+  .cards-wrapper {
+    width: 100%;
+    max-width: 100%;
   }
 
   .flash-card {
-    height: 200px;
+    height: 180px;
   }
 
   .flash-front,
   .flash-back {
-    padding: 20px;
-    font-size: 14px;
+    padding: 16px;
+    font-size: 13px;
   }
 }
+

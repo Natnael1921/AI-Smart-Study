@@ -91,7 +91,7 @@ const Home = ({ user }) => {
         </div>
 
         <h1 className="home-text">
-          <span>Welcome Back</span>, Time to grind
+          <span>Welcome Back,</span> Time to grind
         </h1>
 
         <p className="subtitle">Upload your files to get your helpers</p>

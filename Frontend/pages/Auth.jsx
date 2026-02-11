@@ -34,14 +34,15 @@ const Auth = ({ setUser }) => {
         localStorage.setItem("token", res.data.token);
         localStorage.setItem("user", JSON.stringify(res.data.user));
         setUser(res.data.user);
-        toast.success("Login successful !");
+        toast.success("Login successful!");
         navigate("/home");
       } else {
         await API.post("/api/auth/register", form);
         toast.success("Registration successful! Please login now.");
+        setMode("login"); 
       }
     } catch (err) {
-      alert(err.response?.data?.message || "Something went wrong");
+      toast.error(err.response?.data?.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -87,6 +88,21 @@ const Auth = ({ setUser }) => {
             {mode === "login" ? "Login" : "Register"}
           </button>
         )}
+
+        {/* Toggle link */}
+        <p className="auth-toggle">
+          {mode === "login" ? (
+            <>
+              Don’t have an account?{" "}
+              <span onClick={() => setMode("register")}>Register</span>
+            </>
+          ) : (
+            <>
+              Already have an account?{" "}
+              <span onClick={() => setMode("login")}>Sign in</span>
+            </>
+          )}
+        </p>
       </form>
     </div>
   );

@@ -1,0 +1,62 @@
+.notes-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #f7faf9;
+  margin-left: 18.6%;
+}
+
+.notes-content {
+  flex: 1;
+  padding: 32px 40px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Coming soon center box */
+
+.coming-soon {
+  text-align: center;
+}
+
+.coming-soon h2 {
+  font-size: 28px;
+  font-weight: 600;
+  color: #1f2937;
+  opacity: 0.8;
+}
+
+/* Hamburger */
+
+.hamburger {
+  display: none;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  font-size: 26px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* MOBILE */
+
+@media (max-width: 768px) {
+  .notes-layout {
+    margin-left: 0;
+    flex-direction: column;
+  }
+
+  .notes-content {
+    padding: 28px 22px;
+  }
+
+  .hamburger {
+    display: block;
+  }
+
+  .coming-soon h2 {
+    font-size: 24px;
+  }
+}

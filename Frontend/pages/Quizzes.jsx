@@ -82,6 +82,14 @@ const Quizzes = () => {
   const score = questions.filter(
     (q, i) => answers[i] === q.correctIndex,
   ).length;
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  };
 
   return (
     <div className="home-layout">
@@ -104,7 +112,8 @@ const Quizzes = () => {
                   className="quiz-item"
                   onClick={() => openQuiz(c)}
                 >
-                  {c.title}
+                  <span className="quiz-name">{c.title}</span>
+                  <span className="quiz-date">{formatDate(c.createdAt)}</span>
                 </div>
               ))}
             </div>

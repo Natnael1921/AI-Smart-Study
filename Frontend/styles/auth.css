@@ -43,6 +43,22 @@
 .auth-box button:hover {
   background: #48d61a;
 }
+.auth-toggle {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.auth-toggle span {
+  color: #007bff;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.auth-toggle span:hover {
+  color: #0056b3;
+}
 
 /* Mobile */
 @media (max-width: 480px) {

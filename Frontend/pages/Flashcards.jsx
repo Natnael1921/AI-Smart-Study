@@ -48,6 +48,14 @@ const Flashcards = () => {
   const toggleFlip = (i) => {
     setFlipped((prev) => ({ ...prev, [i]: !prev[i] }));
   };
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  };
 
   return (
     <div className="home-layout">
@@ -70,7 +78,8 @@ const Flashcards = () => {
                   className="flash-course"
                   onClick={() => openFlashcards(c)}
                 >
-                  {c.title}
+                  <span className="flash-name">{c.title}</span>
+                  <span className="flash-date">{formatDate(c.createdAt)}</span>
                 </div>
               ))}
             </div>

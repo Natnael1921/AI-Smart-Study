@@ -64,7 +64,7 @@
   border-radius: 8px;
   margin-bottom: 16px;
   border: none;
-box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
 }
 
 .modal-actions {
@@ -86,15 +86,16 @@ box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
 
 @media (max-width: 768px) {
   .home-layout {
+    padding-top: 18%;
     flex-direction: column;
   }
 
   .home-content {
     margin: 0;
     width: 100%;
-    padding:30px; 
+    padding: 30px;
     box-sizing: border-box;
-    min-height: 100vh; 
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -127,6 +128,7 @@ box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
   }
 
   .home-text span {
+    font-size: 39px;
     display: block;
     color: #5af721;
   }
@@ -136,14 +138,13 @@ box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
     text-align: center;
     color: #555;
     margin-bottom: 30px;
+    padding-right: 28%;
     width: 90%;
   }
   .upload-card {
     width: 100%;
-    max-width: 400px; 
+    max-width: 400px;
     margin: 0 auto;
-    padding: 100px 20px; 
+    padding: 100px 20px;
   }
 }
-
-

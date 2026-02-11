@@ -1,7 +1,7 @@
 .sidebar {
   width: 240px;
   height: 100vh;
-  background: rgba(201, 241, 201,0.1);
+  background: rgba(201, 241, 201, 0.1);
   border-right: 1px solid #e5e7eb;
   padding: 32px 24px;
   position: fixed;
@@ -18,7 +18,6 @@
   font-size: 22px;
   font-weight: 700;
   color: #22c55e;
-  margin-bottom: 28px;
 }
 
 /* NAV */
@@ -36,7 +35,9 @@
   text-decoration: none;
   border-radius: 10px;
   font-size: 15px;
-  transition: background 0.2s ease, color 0.2s ease;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
 }
 
 .sidebar nav a:hover {
@@ -75,9 +76,14 @@
   background: none;
   border: none;
   font-size: 22px;
-  color: #d4af37; 
+  color: #16a34a;
   cursor: pointer;
   display: none;
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10; 
 }
 
 .sidebar nav {
@@ -95,7 +101,9 @@
   text-decoration: none;
   border-radius: 10px;
   font-size: 15px;
-  transition: background 0.2s ease, color 0.2s ease;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
 }
 
 .sidebar nav a img {
@@ -127,6 +135,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 16px 20px;
+  position: relative; /* keep for proper positioning */
 }
 /* MOBILE */
 
@@ -134,7 +143,7 @@
   .sidebar {
     transform: translateX(-100%);
     z-index: 1000;
-  background: rgba(201, 241, 201,0.1);
+    background: rgba(201, 241, 201, 0.4);
     backdrop-filter: blur(18px);
   }
 

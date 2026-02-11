@@ -1,6 +1,9 @@
 import "../styles/landing.css";
+import { useNavigate } from "react-router-dom";
 
 const Landing = () => {
+  const navigate = useNavigate();
+
   return (
     <section className="landing">
       <div className="landing-inner">
@@ -11,12 +14,17 @@ const Landing = () => {
 
           <p>
             Upload your study materials and instantly generate quizzes,
-            flashcards, and explanations powered by AI.
-            Study smarter, not harder.
+            flashcards, and explanations powered by AI. Study smarter, not
+            harder.
           </p>
 
           <div className="landing-buttons">
-            <button className="btn-primary large">Get Started</button>
+            <button
+              className="btn-primary large"
+              onClick={() => navigate("/auth")}
+            >
+              Get Started
+            </button>
             <button className="btn-outline large">Learn More</button>
           </div>
         </div>

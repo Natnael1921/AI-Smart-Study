@@ -13,30 +13,49 @@ export const uploadFile = async (req, res) => {
         .json({ message: "File, title or user ID missing" });
     }
 
-    // 1. Create course
+    let extractedText = "";
+    let processingStatus = "uploaded";
+    let processingError = "";
+
+    try {
+      extractedText = await parsePDF(req.file.path);
+
+      console.log("---- PDF EXTRACTION DEBUG ----");
+      console.log("File:", req.file.originalname);
+      console.log("Extracted length:", extractedText?.length || 0);
+      console.log("Preview:", extractedText?.slice(0, 1000) || "NO TEXT");
+      console.log("------------------------------");
+
+      if (extractedText && extractedText.trim().length > 50) {
+        processingStatus = "parsed";
+      } else {
+        processingStatus = "failed";
+        processingError = "Could not extract enough readable text from PDF";
+      }
+    } catch (parseError) {
+      console.error("PDF PARSE ERROR:", parseError.message);
+      processingStatus = "failed";
+      processingError = "Failed to parse PDF";
+    }
+
     const course = await Course.create({
       title,
       user: userId,
       fileName: req.file.filename,
+      extractedText,
+      processingStatus,
+      processingError,
     });
 
     await User.findByIdAndUpdate(userId, {
       $push: { courses: course._id },
     });
 
-    const extractedText = await parsePDF(req.file.path);
-
-    if (extractedText) {
-      console.log(
-        "Extracted Text (first 500 chars):",
-        extractedText.slice(0, 500),
-      );
-    } else {
-      console.log("Extracted text is empty or undefined");
-    }
     return res.status(201).json({
+      message: "File uploaded successfully",
       courseId: course._id,
-      extractedText,
+      processingStatus: course.processingStatus,
+      processingError: course.processingError,
     });
   } catch (error) {
     console.error("UPLOAD ERROR:", error);

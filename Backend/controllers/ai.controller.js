@@ -20,16 +20,32 @@ const extractBlock = (text, start, end) => {
 
 export const generateAIContent = async (req, res) => {
   try {
-    const { extractedText, courseId } = req.body;
+    const { courseId } = req.body;
 
-    if (!extractedText || !courseId) {
-      return res.status(400).json({ message: "Missing data" });
+    if (!courseId) {
+      return res.status(400).json({ message: "Course ID is required" });
     }
 
     const course = await Course.findById(courseId);
     if (!course) {
       return res.status(404).json({ message: "Course not found" });
     }
+
+    if (!course.extractedText || course.extractedText.trim().length < 50) {
+      course.processingStatus = "failed";
+      course.processingError = "This course has no usable extracted text";
+      await course.save();
+
+      return res.status(400).json({
+        message: "This course has no usable extracted text",
+      });
+    }
+
+    course.processingStatus = "generating";
+    course.processingError = "";
+    await course.save();
+
+    const extractedText = course.extractedText;
 
     const completion = await groq.chat.completions.create({
       model: "llama-3.1-8b-instant",
@@ -43,12 +59,46 @@ export const generateAIContent = async (req, res) => {
       ],
     });
 
-    const raw = completion.choices[0].message.content;
+    const raw = completion.choices[0].message.content || "";
+    console.log("AI RAW RESPONSE:\n", raw);
 
-    //  QUIZ BLOCK
     const quizBlock = extractBlock(raw, "===QUIZ===", "===END QUIZ===");
 
-    //  FLASHCARDS (ROBUST)
+    const questions = quizBlock
+      .split(/(?:^|\n)Q:/)
+      .slice(1)
+      .map((q) => {
+        const lines = q
+          .split("\n")
+          .map((l) => l.trim())
+          .filter(Boolean);
+
+        const question = lines[0];
+
+        const options = lines
+          .filter((l) => /^[A-D]\)/.test(l))
+          .map((l) => l.replace(/^[A-D]\)\s*/, "").trim());
+
+        const correctAnswer = lines
+          .find((l) => l.startsWith("ANSWER:"))
+          ?.replace("ANSWER:", "")
+          .trim();
+
+        const explanation = lines
+          .find((l) => l.startsWith("EXPLANATION:"))
+          ?.replace("EXPLANATION:", "")
+          .trim();
+
+        if (!question || options.length !== 4 || !correctAnswer) return null;
+
+        return {
+          question,
+          options,
+          correctAnswer,
+          explanation: explanation || "",
+        };
+      })
+      .filter(Boolean);
 
     const cards = raw
       .split("FRONT:")
@@ -65,64 +115,65 @@ export const generateAIContent = async (req, res) => {
         };
       })
       .filter((c) => c?.front && c?.back);
-    //  PARSE QUIZ QUESTIONS
-    const questions = quizBlock
-      .split(/(?:^|\n)Q:/)
-      .slice(1)
-      .map((q) => {
-        const lines = q.split("\n").map((l) => l.trim());
 
-        const question = lines[0];
-        const options = lines
-          .filter((l) => /^[A-D]\)/.test(l))
-          .map((l) => l.slice(3).trim());
+    console.log("Questions parsed:", questions.length);
+    console.log("Cards parsed:", cards.length);
 
-        const correctAnswer = lines
-          .find((l) => l.startsWith("ANSWER:"))
-          ?.replace("ANSWER:", "")
-          .trim();
+    if (questions.length === 0 && cards.length === 0) {
+      course.processingStatus = "failed";
+      course.processingError = "AI returned incomplete content";
+      await course.save();
 
-        const explanation = lines
-          .find((l) => l.startsWith("EXPLANATION:"))
-          ?.replace("EXPLANATION:", "")
-          .trim();
-
-        if (!question || options.length !== 4 || !correctAnswer) return null;
-
-        return { question, options, correctAnswer, explanation };
-      })
-      .filter(Boolean);
-
-    if (questions.length === 0) {
       return res.status(422).json({
-        message: "AI could not generate quiz questions",
+        message: "AI returned incomplete content",
       });
     }
 
-    //  SAVE TO DB
-    await Quiz.create({
-      course: courseId,
-      questions: questions.slice(0, 25),
-    });
+    await Quiz.deleteOne({ course: courseId });
+    await FlashCard.deleteOne({ course: courseId });
 
-    await FlashCard.create({
-      course: courseId,
-      cards: cards.slice(0, 15),
-    });
+    if (questions.length > 0) {
+      await Quiz.create({
+        course: courseId,
+        questions: questions.slice(0, 25),
+      });
+    }
 
-    res.status(201).json({
+    if (cards.length > 0) {
+      await FlashCard.create({
+        course: courseId,
+        cards: cards.slice(0, 15),
+      });
+    }
+
+    course.processingStatus = "completed";
+    course.processingError = "";
+    await course.save();
+
+    return res.status(201).json({
       message: "AI content generated successfully",
       quizCount: questions.length,
       flashCardCount: cards.length,
     });
   } catch (err) {
-    console.error(" AI ERROR:", err);
-    res.status(500).json({ message: err.message });
+    console.error("AI ERROR:", err);
+
+    if (req.body?.courseId) {
+      try {
+        await Course.findByIdAndUpdate(req.body.courseId, {
+          processingStatus: "failed",
+          processingError: err.message,
+        });
+      } catch (updateErr) {
+        console.error("FAILED TO UPDATE COURSE STATUS:", updateErr.message);
+      }
+    }
+
+    return res.status(500).json({ message: err.message });
   }
 };
 
-//GET QUIZ BY COURSE
-
+// GET QUIZ BY COURSE
 export const getQuizByCourse = async (req, res) => {
   try {
     const { courseId } = req.params;
@@ -139,8 +190,7 @@ export const getQuizByCourse = async (req, res) => {
   }
 };
 
-//GET FLASHCARDS BY COURSE
-
+// GET FLASHCARDS BY COURSE
 export const getFlashCardsByCourse = async (req, res) => {
   try {
     const { courseId } = req.params;

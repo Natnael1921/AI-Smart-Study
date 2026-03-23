@@ -43,12 +43,15 @@ const Home = ({ user }) => {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      const { courseId, extractedText } = res.data;
+      const { courseId, processingStatus, processingError } = res.data;
 
-      const cleanText = extractedText.replace(/\u0000/g, "");
+      if (processingStatus === "failed") {
+        throw new Error(processingError || "PDF parsing failed");
+      }
+
       const aiRes = await API.post(
         "/api/ai/generate",
-        { courseId, extractedText: cleanText },
+        { courseId },
         {
           headers: {
             Authorization: `Bearer ${token}`,

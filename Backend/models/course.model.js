@@ -16,8 +16,21 @@ const courseSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    extractedText: {
+      type: String,
+      default: "",
+    },
+    processingStatus: {
+      type: String,
+      enum: ["uploaded", "parsed", "generating", "completed", "failed"],
+      default: "uploaded",
+    },
+    processingError: {
+      type: String,
+      default: "",
+    },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 export default mongoose.model("Course", courseSchema);

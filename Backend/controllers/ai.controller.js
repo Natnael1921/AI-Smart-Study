@@ -6,9 +6,16 @@ import { quizAndFlashPrompt } from "../prompts/ai.prompts.js";
 
 const extractBlock = (text, start, end) => {
   const s = text.indexOf(start);
-  const e = text.indexOf(end);
-  if (s === -1 || e === -1) return "";
-  return text.substring(s + start.length, e).trim();
+  if (s === -1) return "";
+
+  const startIndex = s + start.length;
+  const e = text.indexOf(end, startIndex);
+
+  if (e === -1) {
+    return text.substring(startIndex).trim();
+  }
+
+  return text.substring(startIndex, e).trim();
 };
 
 export const generateAIContent = async (req, res) => {
@@ -27,6 +34,7 @@ export const generateAIContent = async (req, res) => {
     const completion = await groq.chat.completions.create({
       model: "llama-3.1-8b-instant",
       temperature: 0,
+      max_completion_tokens: 2500,
       messages: [
         {
           role: "user",
@@ -36,36 +44,30 @@ export const generateAIContent = async (req, res) => {
     });
 
     const raw = completion.choices[0].message.content;
-    console.log("AI RAW RESPONSE:\n", raw);
 
     //  QUIZ BLOCK
     const quizBlock = extractBlock(raw, "===QUIZ===", "===END QUIZ===");
 
     //  FLASHCARDS (ROBUST)
-    const flashSection =
-      raw.split("===FLASHCARDS===")[1]?.split("===END FLASHCARDS===")[0] || "";
 
-    const cards = flashSection
+    const cards = raw
       .split("FRONT:")
       .slice(1)
       .map((block) => {
-        const [front, back] = block.split("BACK:");
+        const [frontPart, backPart] = block.split("BACK:");
+        if (!frontPart || !backPart) return null;
+
+        const cleanBack = backPart.replace(/===END FLASHCARDS===/g, "").trim();
+
         return {
-          front: front?.trim(),
-          back: back?.trim(),
+          front: frontPart.trim(),
+          back: cleanBack,
         };
       })
-      .filter((c) => c.front && c.back);
-
-
-    if (!quizBlock && cards.length === 0) {
-      return res.status(422).json({
-        message: "AI failed to generate content",
-      });
-    }
+      .filter((c) => c?.front && c?.back);
     //  PARSE QUIZ QUESTIONS
     const questions = quizBlock
-      .split("\nQ:")
+      .split(/(?:^|\n)Q:/)
       .slice(1)
       .map((q) => {
         const lines = q.split("\n").map((l) => l.trim());

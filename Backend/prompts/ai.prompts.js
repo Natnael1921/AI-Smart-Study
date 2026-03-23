@@ -3,7 +3,7 @@ Generate content strictly between markers.
 DO NOT add anything outside the markers.
 
 ===QUIZ===
-Generate EXACTLY 25 multiple choice questions.
+Generate EXACTLY 20 multiple choice questions .
 
 Format strictly:
 Q: question
@@ -18,21 +18,16 @@ EXPLANATION: short explanation
 ===FLASHCARDS===
 Generate EXACTLY 15 flashcards.
 
-Repeat this format INSIDE this block ONLY:
-
+Format strictly:
 FRONT: text
 BACK: text
-
-Do NOT repeat ===FLASHCARDS=== or ===END FLASHCARDS===
-
 ===END FLASHCARDS===
 
 IMPORTANT RULES:
 - ALWAYS include ALL markers
-- NEVER skip flashcards
 - NEVER rename markers
-- NEVER add explanations outside blocks
+- NEVER skip sections
 
 CONTENT:
-${text.slice(0, 6000)}
+${text.slice(0, 4000)}
 `;

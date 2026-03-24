@@ -3,7 +3,7 @@ Generate content strictly between markers.
 DO NOT add anything outside the markers.
 
 ===QUIZ===
-Generate EXACTLY 20 multiple choice questions .
+Generate EXACTLY 20 multiple choice questions( 50% medium ,25% hard ,and 25% easy).
 
 Format strictly:
 Q: question

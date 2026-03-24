@@ -1,5 +1,12 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import "../styles/sidebar.css";
+import {
+  Home as HomeIcon,
+  BookOpen,
+  FileText,
+  ClipboardList,
+  Layers
+} from "lucide-react";
 
 const Sidebar = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
@@ -9,6 +16,14 @@ const Sidebar = ({ isOpen, onClose }) => {
     localStorage.removeItem("user");
     navigate("/auth");
   };
+
+  const menuItems = [
+    { to: "/home", label: "Home", icon: <HomeIcon size={20} /> },
+    { to: "/courses", label: "Courses", icon: <BookOpen size={20} /> },
+    { to: "/notes", label: "Notes", icon: <FileText size={20} /> },
+    { to: "/quizzes", label: "Quizzes", icon: <ClipboardList size={20} /> },
+    { to: "/flashcards", label: "Flashcards", icon: <Layers size={20} /> },
+  ];
 
   return (
     <aside className={`sidebar ${isOpen ? "open" : ""}`}>
@@ -28,30 +43,12 @@ const Sidebar = ({ isOpen, onClose }) => {
       </div>
 
       <nav>
-        <NavLink to="/home">
-          <img src="/icons/home.svg" alt="Home" />
-          <span>Home</span>
-        </NavLink>
-
-        <NavLink to="/courses">
-          <img src="/icons/courses.png" alt="Courses" />
-          <span>Courses</span>
-        </NavLink>
-
-        <NavLink to="/notes">
-          <img src="/icons/notes.png" alt="Notes" />
-          <span>Notes</span>
-        </NavLink>
-
-        <NavLink to="/quizzes">
-          <img src="/icons/quiz.png" alt="Quizzes" />
-          <span>Quizzes</span>
-        </NavLink>
-
-        <NavLink to="/flashcards">
-          <img src="/icons/flashcards.png" alt="Flashcards" />
-          <span>Flashcards</span>
-        </NavLink>
+        {menuItems.map((item) => (
+          <NavLink key={item.to} to={item.to}>
+            <span className="sidebar-icon">{item.icon}</span>
+            <span>{item.label}</span>
+          </NavLink>
+        ))}
       </nav>
 
       <button className="logout-btn" onClick={handleLogout}>

@@ -1,12 +1,13 @@
 import "../styles/uploadcard.css";
 import Spinner from "./Spinner";
+import { UploadCloud } from "lucide-react";
 
 const UploadCard = ({ onUpload, isLoading }) => {
   if (isLoading) {
     return (
       <div className="upload-card">
         <h2>Generating your content...</h2>
-        <p>This may take a few seconds </p>
+        <p>This may take a few seconds</p>
         <Spinner size={70} />
       </div>
     );
@@ -14,7 +15,9 @@ const UploadCard = ({ onUpload, isLoading }) => {
 
   return (
     <div className="upload-card">
-      <div className="upload-icon">+</div>
+      <div className="upload-icon">
+        <UploadCloud size={36} />
+      </div>
 
       <h3>Upload your files</h3>
 

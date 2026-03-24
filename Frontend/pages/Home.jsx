@@ -4,6 +4,7 @@ import UploadCard from "../components/UploadCard";
 import API from "../api";
 import "../styles/Home.css";
 import { toast } from "react-toastify";
+import { BookOpen, NotebookPen, Layers3, Upload } from "lucide-react";
 
 const Home = ({ user }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -13,17 +14,22 @@ const Home = ({ user }) => {
   const [title, setTitle] = useState("");
   const [showTitleBox, setShowTitleBox] = useState(false);
 
-  //  STEP 1: when user chooses PDF
+  const stats = [
+    { id: 1, title: "Total Courses", value: "8", icon: BookOpen },
+    { id: 2, title: "Notes Generated", value: "24", icon: NotebookPen },
+    { id: 3, title: "Flashcards Created", value: "132", icon: Layers3 },
+    { id: 4, title: "Uploads", value: "11", icon: Upload },
+  ];
+
   const handleUpload = (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
     setSelectedFile(file);
-    setTitle(file.name.replace(".pdf", "")); // default title
+    setTitle(file.name.replace(".pdf", ""));
     setShowTitleBox(true);
   };
 
-  //  STEP 2: upload after title confirm
   const handleConfirmUpload = async () => {
     if (!title.trim() || !selectedFile) return;
 
@@ -31,7 +37,7 @@ const Home = ({ user }) => {
     formData.append("file", selectedFile);
     formData.append("title", title);
 
-    const toastId = toast.loading("Uploading & generating content... ");
+    const toastId = toast.loading("Uploading & generating content...");
 
     try {
       setIsLoading(true);
@@ -68,7 +74,7 @@ const Home = ({ user }) => {
       });
     } catch (err) {
       toast.update(toastId, {
-        render: err.response?.data?.message || "Upload failed !",
+        render: err.response?.data?.message || "Upload failed!",
         type: "error",
         isLoading: false,
         autoClose: 4000,
@@ -89,23 +95,63 @@ const Home = ({ user }) => {
           ☰
         </button>
 
-        <div className="home-header">
-          <h2>Hi, {user?.name || "User"}</h2>
-        </div>
+        <section className="topbar-section">
+          <div className="topbar-left">
+            <p className="greeting">Hi, {user?.name || "User"}</p>
+            <h1 className="home-title">Welcome back to your smart workspace</h1>
+          </div>
 
-        <h1 className="home-text">
-          <span>Welcome Back,</span> Time to grind
-        </h1>
+          <div className="topbar-right">
+            <p className="topbar-badge">Stay consistent</p>
+          </div>
+        </section>
 
-        <p className="subtitle">Upload your files to get your helpers</p>
+        <section className="stats-grid">
+          {stats.map((item) => {
+            const Icon = item.icon;
+            return (
+              <div className="stat-card" key={item.id}>
+                <div className="stat-icon">
+                  <Icon size={20} />
+                </div>
+                <div className="stat-info">
+                  <p>{item.title}</p>
+                  <h3>{item.value}</h3>
+                </div>
+              </div>
+            );
+          })}
+        </section>
 
-        <UploadCard onUpload={handleUpload} isLoading={isLoading} />
+        <section className="upload-section">
+          <div className="upload-section-text">
+            <span className="mini-badge">Quick Start</span>
+            <h2>Turn your PDF into powerful study materials</h2>
+            <p>
+              Upload your course file and generate organized notes, quizzes, and
+              flashcards in one smooth workflow.
+            </p>
 
-        {/* TITLE INPUT MODAL */}
+            <div className="upload-points">
+              <span>Smart notes</span>
+              <span>Quiz generation</span>
+              <span>Flashcards</span>
+              <span>Clean organization</span>
+            </div>
+          </div>
+
+          <div className="upload-section-card">
+            <UploadCard onUpload={handleUpload} isLoading={isLoading} />
+          </div>
+        </section>
+
         {showTitleBox && (
           <div className="modal-overlay">
             <div className="modal-box">
               <h3>Name your course</h3>
+              <p className="modal-subtext">
+                Choose a clean title so you can find it easily later.
+              </p>
 
               <input
                 type="text"

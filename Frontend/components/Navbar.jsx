@@ -6,14 +6,14 @@ const Navbar = () => {
 
   return (
     <nav className="navbar">
-      <div
-        className="navbar-logo"
-        onClick={() => navigate("/")}
-        style={{ cursor: "pointer" }}
-      >
-        AI Quiz
+      <div className="logo-group">
+        <img
+          src="/appLogo.png"
+          alt="Smart Study Logo"
+          className="sidebar-logo-img"
+        />
+        <h2 className="sidebar-logo">Smart Study</h2>
       </div>
-
       <div className="navbar-actions">
         <button
           className="btn-outline"
@@ -21,6 +21,7 @@ const Navbar = () => {
         >
           Login
         </button>
+
         <button
           className="btn-primary"
           onClick={() => navigate("/auth?mode=register")}

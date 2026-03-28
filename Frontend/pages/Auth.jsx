@@ -39,7 +39,7 @@ const Auth = ({ setUser }) => {
       } else {
         await API.post("/api/auth/register", form);
         toast.success("Registration successful! Please login now.");
-        setMode("login"); 
+        setMode("login");
       }
     } catch (err) {
       toast.error(err.response?.data?.message || "Something went wrong");
@@ -50,60 +50,61 @@ const Auth = ({ setUser }) => {
 
   return (
     <div className="auth-container">
-      <form className="auth-box" onSubmit={handleSubmit}>
-        <h2>{mode === "login" ? "Welcome Back" : "Create Account"}</h2>
+      <div className="auth-form-wrapper">
+        <form className="auth-box" onSubmit={handleSubmit}>
+          <h2>{mode === "login" ? "Welcome Back" : "Create Account"}</h2>
 
-        {mode === "register" && (
+          {mode === "register" && (
+            <input
+              name="name"
+              placeholder="Full Name"
+              value={form.name}
+              onChange={handleChange}
+              required
+            />
+          )}
+
           <input
-            name="name"
-            placeholder="Full Name"
-            value={form.name}
+            name="email"
+            type="email"
+            placeholder="Email"
+            value={form.email}
             onChange={handleChange}
             required
           />
-        )}
 
-        <input
-          name="email"
-          type="email"
-          placeholder="Email"
-          value={form.email}
-          onChange={handleChange}
-          required
-        />
+          <input
+            name="password"
+            type="password"
+            placeholder="Password"
+            value={form.password}
+            onChange={handleChange}
+            required
+          />
 
-        <input
-          name="password"
-          type="password"
-          placeholder="Password"
-          value={form.password}
-          onChange={handleChange}
-          required
-        />
-
-        {loading ? (
-          <Spinner />
-        ) : (
-          <button type="submit">
-            {mode === "login" ? "Login" : "Register"}
-          </button>
-        )}
-
-        {/* Toggle link */}
-        <p className="auth-toggle">
-          {mode === "login" ? (
-            <>
-              Don’t have an account?{" "}
-              <span onClick={() => setMode("register")}>Register</span>
-            </>
+          {loading ? (
+            <Spinner />
           ) : (
-            <>
-              Already have an account?{" "}
-              <span onClick={() => setMode("login")}>Sign in</span>
-            </>
+            <button type="submit">
+              {mode === "login" ? "Login" : "Register"}
+            </button>
           )}
-        </p>
-      </form>
+
+          <p className="auth-toggle">
+            {mode === "login" ? (
+              <>
+                Don’t have an account?{" "}
+                <span onClick={() => setMode("register")}>Register</span>
+              </>
+            ) : (
+              <>
+                Already have an account?{" "}
+                <span onClick={() => setMode("login")}>Sign in</span>
+              </>
+            )}
+          </p>
+        </form>
+      </div>
     </div>
   );
 };

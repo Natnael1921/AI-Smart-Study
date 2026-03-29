@@ -136,7 +136,6 @@ const Home = ({ user }) => {
               <span>Smart notes</span>
               <span>Quiz generation</span>
               <span>Flashcards</span>
-              <span>Clean organization</span>
             </div>
           </div>
 

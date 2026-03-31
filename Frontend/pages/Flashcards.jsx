@@ -3,7 +3,9 @@ import Sidebar from "../components/sidebar";
 import API from "../api";
 import "../styles/flashcards.css";
 import Spinner from "../components/Spinner";
+import { BookOpen, Layers3, Clock } from "lucide-react";
 import { toast } from "react-toastify";
+
 const Flashcards = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [courses, setCourses] = useState([]);
@@ -48,37 +50,75 @@ const Flashcards = () => {
   const toggleFlip = (i) => {
     setFlipped((prev) => ({ ...prev, [i]: !prev[i] }));
   };
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      year: "numeric",
+
+  const formatDate = (dateString) =>
+    new Date(dateString).toLocaleDateString("en-US", {
       month: "short",
       day: "numeric",
+      year: "numeric",
     });
-  };
 
   return (
     <div className="home-layout">
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
-      <main className="home-content flashcards-content">
+      <main className="home-content flashcards-page">
         <button className="hamburger" onClick={() => setSidebarOpen(true)}>
           ☰
         </button>
 
         {!selectedCourse && (
           <>
-            <h1 className="flash-title">Your recent Flashcards</h1>
+            {/* HEADER */}
+            <div className="flash-header">
+              <div>
+                <h1>Your Flashcards</h1>
+                <p>Flip, learn and memorize faster</p>
+              </div>
+            </div>
+
+            {/* STATS */}
+            <div className="flash-stats">
+              <div className="stat-card">
+                <div className="stat-icon">
+                  <BookOpen size={18} />
+                </div>
+                <p>Total Sets</p>
+                <h3>{courses.length}</h3>
+              </div>
+
+              <div className="stat-card">
+                <div className="stat-icon">
+                  <Layers3 size={18} />
+                </div>
+                <p>Total Cards</p>
+                <h3>{cards.length || 0}</h3>
+              </div>
+
+              <div className="stat-card">
+                <div className="stat-icon">
+                  <Clock size={18} />
+                </div>
+                <p>Last Studied</p>
+                <h3>Today</h3>
+              </div>
+            </div>
+
             {loading && <Spinner />}
 
+            {/* LIST */}
             <div className="flash-list">
               {courses.map((c) => (
                 <div
                   key={c._id}
-                  className="flash-course"
+                  className="flash-card-item"
                   onClick={() => openFlashcards(c)}
                 >
-                  <span className="flash-name">{c.title}</span>
+                  <div>
+                    <h3>{c.title}</h3>
+                    <p>Click to study</p>
+                  </div>
+
                   <span className="flash-date">{formatDate(c.createdAt)}</span>
                 </div>
               ))}
@@ -86,6 +126,7 @@ const Flashcards = () => {
           </>
         )}
 
+        {/* FLASHCARDS VIEW */}
         {selectedCourse && (
           <>
             <button
@@ -97,16 +138,16 @@ const Flashcards = () => {
 
             <h2>{selectedCourse.title} flashcards</h2>
 
-            <div className="cards-wrapper">
+            <div className="cards-grid">
               {cards.map((card, i) => (
                 <div
                   key={i}
-                  className={`flash-card ${flipped[i] ? "flipped" : ""}`}
+                  className={`flash-modern ${flipped[i] ? "flipped" : ""}`}
                   onClick={() => toggleFlip(i)}
                 >
-                  <div className="flash-inner">
-                    <div className="flash-front">{card.front}</div>
-                    <div className="flash-back">{card.back}</div>
+                  <div className="flash-modern-inner">
+                    <div className="front">{card.front}</div>
+                    <div className="back">{card.back}</div>
                   </div>
                 </div>
               ))}
